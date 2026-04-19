@@ -36,5 +36,6 @@ my-project/
 ### Code Map工具
 
 - **aider repo map**: aider 不走“整仓库全文打包”的路子，而是生成一个简洁的仓库地图，包含重要类、函数、签名和关键定义
+	- aider需要主动控制添加的文件列表
 - **Repomix**:  Repomix is a powerful tool that packs your entire repository into a single, AI-friendly file. 
   - Warn: 单文件尺寸是一个值得注意的点，且output是一个xml文件
