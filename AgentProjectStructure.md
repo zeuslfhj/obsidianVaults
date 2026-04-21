@@ -47,4 +47,4 @@ my-project/
 - **Explanatory Output Style** : 用来输出cc编码的逻辑和内部设计
 - **Frontend Design**: 用来前端界面输出
 - **typescript-lsp** || **[ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill)** : 用来进行ts的类型检查，而不是靠模型推论
-- **PPTX**: yong
+- **PPTX**: 用来制作PPT
