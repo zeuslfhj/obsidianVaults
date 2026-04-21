@@ -43,5 +43,8 @@ my-project/
 ## Claude Skill推荐
 - **Planning with files**: 规划、进度和知识都写进 Markdown 文件 [git](https://github.com/OthmanAdi/planning-with-files)
 - **superpowers**: 打包了 20 多个可组合的 Skill [git](https://github.com/obra/superpowers) ,可以尝试**brainstorming** worktress, test-driven-development
-- claude.md manager: 维护claude 的整洁 [claude code](https://claude.com/plugins/claude-md-management) 
-- **Explanatory Output Style**
+- **claude.md manager**: 维护claude 的整洁 [claude code](https://claude.com/plugins/claude-md-management) 
+- **Explanatory Output Style** : 用来输出cc编码的逻辑和内部设计
+- **Frontend Design**: 用来前端界面输出
+- **typescript-lsp** || **[ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill)** : 用来进行ts的类型检查，而不是靠模型推论
+- **PPTX**: yong
