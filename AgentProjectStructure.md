@@ -43,4 +43,5 @@ my-project/
 ## Claude Skill推荐
 - **Planning with files**: 规划、进度和知识都写进 Markdown 文件 [git](https://github.com/OthmanAdi/planning-with-files)
 - **superpowers**: 打包了 20 多个可组合的 Skill [git](https://github.com/obra/superpowers) ,可以尝试**brainstorming** worktress, test-driven-development
-- claude.md manager: 维护claude 的a
+- claude.md manager: 维护claude 的整洁 [claude code](https://claude.com/plugins/claude-md-management) 
+- **Explanatory Output Style**
