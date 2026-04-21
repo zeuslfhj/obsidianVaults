@@ -39,3 +39,8 @@ my-project/
 	- aider需要主动控制添加的文件列表
 - **Repomix**:  Repomix is a powerful tool that packs your entire repository into a single, AI-friendly file. 
   - Warn: 单文件尺寸是一个值得注意的点，且output是一个xml文件
+
+## Claude Skill推荐
+- **Planning with files**: 规划、进度和知识都写进 Markdown 文件 [git](https://github.com/OthmanAdi/planning-with-files)
+- **superpowers**: 打包了 20 多个可组合的 Skill [git](https://github.com/obra/superpowers) ,可以尝试**brainstorming** worktress, test-driven-development
+- claude.md manager: 维护claude 的a
