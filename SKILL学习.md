@@ -91,5 +91,10 @@ A explicit checklist helps the agent track progress avoid skipping steps
 ### Plan-validate-execute
 When You try to create a batch or destructive operations, adding a validation in the list, valid it against a source of truth, only then execute the operation
 
+Code Review Skill Summary
+1. Write the task list for this skill
+write code style
+
 ## Reference
 [AgentSkill](https://agentskills.io)
+[code review skill](https://github.com/obra/superpowers/blob/main/skills/requesting-code-review/code-reviewer.md)
