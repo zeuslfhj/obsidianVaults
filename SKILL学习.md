@@ -93,7 +93,10 @@ When You try to create a batch or destructive operations, adding a validation in
 
 Code Review Skill Summary
 1. Write the task list for this skill
-write code style
+2. How to review the code? Requirements/Plan + Diff + Review Checklist
+	1. Review Check List
+		1. Code Quality
+		2. Architecture
 
 ## Reference
 [AgentSkill](https://agentskills.io)
