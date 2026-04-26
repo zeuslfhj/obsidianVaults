@@ -46,7 +46,7 @@ The leaked source tells a different story. What Anthropic actually shipped is 51
 
 This is not a wrapper. This is an operating system for an AI agent.
 
-The Hacker News community split into two camps. One camp dismissed the leak with a casino metaphor: “The source code of the slot machine is not relevant to the casino manager.” The model is the money. The CLI is disposable. The other camp saw the opposite: the model is the dealer. The harness is the casino. And casinos are very hard to build.
+The Hacker News community split into two camps. One camp dismissed the leak with a casino metaphor: “The source code of the slot machine is not relevant to the casino manager.” The model is the money. The CLI is disposable. The other camp saw the opposite: the model is the dealer. The harness is the casino. And casinos(赌场) are very hard to build.
 
 The numbers support the second camp. Opus 4.6 is available to anyone through the API at $5/$25 per million tokens. Yet VentureBeat reports Claude Code alone generates $2.5 billion in annualized recurring revenue, with 80% coming from enterprise adoption. Developers are not paying for the model. They are paying for the harness that makes the model useful: the tool orchestration, the permission system, the context management, the error recovery. Strip that away and you have an expensive autocomplete.
 
