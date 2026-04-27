@@ -1,6 +1,10 @@
+[[Claude Code Source Map]]
+
 # Everyone Analyzed Claude Code’s Features. Nobody Analyzed Its Architecture.
 
 ## Five hundred thousand lines of leaked source code reveal that the moat in AI coding tools is not the model. It is the harness.
+
+[Reference](https://medium.com/data-science-collective/everyone-analyzed-claude-codes-features-nobody-analyzed-its-architecture-1173470ab622)
 
 [
 ![Han HELOIR YAN, Ph.D. ☕️](https://miro.medium.com/v2/resize:fill:64:64/1*QKpZJpnggjxenDvymZOQ_g@2x.jpeg)
