@@ -32,3 +32,11 @@ Subagents: split exploration from editing.
 | *LSP is accessed through the plugin layer. Subagents are a delegation capability rather than a configured extension point. |                                                           |                                  |                                                                          |                                                         |
 
 Read `### Actively maintaining CLAUDE.md files as model intelligence evolves`  again
+
+Getting Start CheckList 
+1. Structure CLAUDE.md file
+2. Wire up hooks for non-negotiables
+3. install skills and plugins for domain expertise
+4. make the codebase navigable
+5. Schedule regular configuration reviews
+6. Assign ownership
