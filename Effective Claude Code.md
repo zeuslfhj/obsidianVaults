@@ -1,5 +1,7 @@
 # Claude Code Source Analysis
 
+[Reference](https://claude.com/blog/how-claude-code-works-in-large-codebases-best-practices-and-where-to-start)
+
 ## How Claude Code Works in Large Codebases
 
 Most RAG-powered AI coding tools work by embedding the entire codebase, then retrieving relevant chunks at query time. This approach is useful for static repositories, but it can become stale in active engineering teams because embeddings may lag behind recent code changes.
@@ -26,38 +28,38 @@ Claude Code can be understood as a model plus a harness. The model reasons and w
 
 Claude Code hooks fire at specific points in the session lifecycle. They can run command hooks, HTTP hooks, MCP tool hooks, prompt hooks, or agent hooks, depending on the event.
 
-| Hook Event | When It Fires | Typical Use |
-| --- | --- | --- |
-| `Setup` | During one-time setup flows such as initialization or maintenance mode. | Prepare CI/script environments before the main session starts. |
-| `SessionStart` | When a session begins or resumes. | Load context, initialize state, set session metadata, or reload skills. |
-| `UserPromptSubmit` | After the user submits a prompt, before Claude processes it. | Validate requests, inject dynamic context, enforce prompt rules. |
-| `UserPromptExpansion` | When a typed slash command expands into a prompt. | Block or validate command expansion before it reaches Claude. |
-| `PreToolUse` | Before a tool call executes. | Block dangerous commands, rewrite tool input, enforce file or command policies. |
-| `PermissionRequest` | When Claude Code asks for permission to run an action. | Auto-allow, deny, modify input, or apply temporary permission rules. |
-| `PermissionDenied` | When auto mode denies a tool call. | Tell the model whether it may retry with a safer action. |
-| `PostToolUse` | After a tool call succeeds. | Log actions, format edited files, run lightweight validation. |
-| `PostToolUseFailure` | After a tool call fails. | Capture failure context, add remediation guidance, trigger diagnostics. |
-| `PostToolBatch` | After a batch of parallel tool calls completes. | Review combined tool results before the next model call. |
-| `Notification` | When Claude Code sends a notification. | Forward status to desktop notifications, Slack, PagerDuty, or logs. |
-| `MessageDisplay` | While assistant message text is displayed. | Observe or react to streamed assistant output. |
-| `SubagentStart` | When a subagent is spawned. | Track delegated work and initialize subagent-specific context. |
-| `SubagentStop` | When a subagent finishes. | Validate subagent output or trigger follow-up work. |
-| `TaskCreated` | When a task is created through task tooling. | Enforce task metadata or register task state externally. |
-| `TaskCompleted` | When a task is marked complete. | Validate completion criteria or update external trackers. |
-| `Stop` | When Claude finishes responding. | Run final checks, require tests, save notes, or prevent premature stopping. |
-| `StopFailure` | When the turn ends because of an API error. | Log failure state; hook output and exit code are ignored. |
-| `TeammateIdle` | When an agent-team teammate is about to go idle. | Decide whether the teammate should stop or continue. |
-| `InstructionsLoaded` | When `CLAUDE.md` or `.claude/rules/*.md` is loaded into context. | Audit loaded instructions or react to lazily loaded rules. |
-| `ConfigChange` | When configuration changes during a session. | Re-validate environment or refresh derived configuration. |
-| `CwdChanged` | When the working directory changes. | Update environment state, such as `direnv`-style behavior. |
-| `FileChanged` | When a watched file changes on disk. | Trigger async checks, reload context, or run targeted validation. |
-| `WorktreeCreate` | When a worktree is being created. | Replace or customize default git worktree behavior. |
-| `WorktreeRemove` | When a worktree is being removed. | Clean up temporary state or archive subagent outputs. |
-| `PreCompact` | Before context compaction. | Archive transcripts or preserve critical state before summarization. |
-| `PostCompact` | After context compaction completes. | Restore compacted-session context or log compaction results. |
-| `Elicitation` | When an MCP server requests user input during a tool call. | Validate or decline external input requests. |
-| `ElicitationResult` | After the user responds to an MCP elicitation. | Modify, block, or audit the response before it returns to the MCP server. |
-| `SessionEnd` | When the session terminates. | Clean up resources, persist summaries, or record session outcome. |
+| Hook Event            | When It Fires                                                           | Typical Use                                                                     |
+| --------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `Setup`               | During one-time setup flows such as initialization or maintenance mode. | Prepare CI/script environments before the main session starts.                  |
+| `SessionStart`        | When a session begins or resumes.                                       | Load context, initialize state, set session metadata, or reload skills.         |
+| `UserPromptSubmit`    | After the user submits a prompt, before Claude processes it.            | Validate requests, inject dynamic context, enforce prompt rules.                |
+| `UserPromptExpansion` | When a typed slash command expands into a prompt.                       | Block or validate command expansion before it reaches Claude.                   |
+| `PreToolUse`          | Before a tool call executes.                                            | Block dangerous commands, rewrite tool input, enforce file or command policies. |
+| `PermissionRequest`   | When Claude Code asks for permission to run an action.                  | Auto-allow, deny, modify input, or apply temporary permission rules.            |
+| `PermissionDenied`    | When auto mode denies a tool call.                                      | Tell the model whether it may retry with a safer action.                        |
+| `PostToolUse`         | After a tool call succeeds.                                             | Log actions, format edited files, run lightweight validation.                   |
+| `PostToolUseFailure`  | After a tool call fails.                                                | Capture failure context, add remediation guidance, trigger diagnostics.         |
+| `PostToolBatch`       | After a batch of parallel tool calls completes.                         | Review combined tool results before the next model call.                        |
+| `Notification`        | When Claude Code sends a notification.                                  | Forward status to desktop notifications, Slack, PagerDuty, or logs.             |
+| `MessageDisplay`      | While assistant message text is displayed.                              | Observe or react to streamed assistant output.                                  |
+| `SubagentStart`       | When a subagent is spawned.                                             | Track delegated work and initialize subagent-specific context.                  |
+| `SubagentStop`        | When a subagent finishes.                                               | Validate subagent output or trigger follow-up work.                             |
+| `TaskCreated`         | When a task is created through task tooling.                            | Enforce task metadata or register task state externally.                        |
+| `TaskCompleted`       | When a task is marked complete.                                         | Validate completion criteria or update external trackers.                       |
+| `Stop`                | When Claude finishes responding.                                        | Run final checks, require tests, save notes, or prevent premature stopping.     |
+| `StopFailure`         | When the turn ends because of an API error.                             | Log failure state; hook output and exit code are ignored.                       |
+| `TeammateIdle`        | When an agent-team teammate is about to go idle.                        | Decide whether the teammate should stop or continue.                            |
+| `InstructionsLoaded`  | When `CLAUDE.md` or `.claude/rules/*.md` is loaded into context.        | Audit loaded instructions or react to lazily loaded rules.                      |
+| `ConfigChange`        | When configuration changes during a session.                            | Re-validate environment or refresh derived configuration.                       |
+| `CwdChanged`          | When the working directory changes.                                     | Update environment state, such as `direnv`-style behavior.                      |
+| `FileChanged`         | When a watched file changes on disk.                                    | Trigger async checks, reload context, or run targeted validation.               |
+| `WorktreeCreate`      | When a worktree is being created.                                       | Replace or customize default git worktree behavior.                             |
+| `WorktreeRemove`      | When a worktree is being removed.                                       | Clean up temporary state or archive subagent outputs.                           |
+| `PreCompact`          | Before context compaction.                                              | Archive transcripts or preserve critical state before summarization.            |
+| `PostCompact`         | After context compaction completes.                                     | Restore compacted-session context or log compaction results.                    |
+| `Elicitation`         | When an MCP server requests user input during a tool call.              | Validate or decline external input requests.                                    |
+| `ElicitationResult`   | After the user responds to an MCP elicitation.                          | Modify, block, or audit the response before it returns to the MCP server.       |
+| `SessionEnd`          | When the session terminates.                                            | Clean up resources, persist summaries, or record session outcome.               |
 
 ### Core Capabilities
 
