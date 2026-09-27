@@ -6,3 +6,4 @@ Semantic Router: 它是一个使用embedding来进行router选择的一个仓库
 - [[AI Reference/AWS RAG Part 1：文章整理与重点理解核对|AWS RAG Part 1 阅读笔记]]
 - [FlagEmbedding library on Hugging Face](https://huggingface.co/BAAI/bge-large-en#frequently-asked-questions) 可以看看是什么内容，主要是怎么做到embedding的
 - [[AI Reference/CHIQ：对话历史增强与查询改写论文笔记|CHIQ 对话历史增强与查询改写论文笔记]]
+- [[AI Reference/DVCQR：双视图查询改写与分阶段强化学习论文笔记|DVCQR 双视图查询改写与分阶段强化学习论文笔记]]
