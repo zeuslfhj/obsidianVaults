@@ -1,0 +1,1 @@
+Semantic Router: 它是一个使用embedding来进行router选择的一个仓库，它不执行query的rewrite等行为，而是将query通过embedding来进行判定，并选择合适的router
