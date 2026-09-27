@@ -8,7 +8,7 @@ published: 2024-10-24
 reviewed: 2026-09-27
 ---
 
-# AWS RAG Part 1：文章整理与重点理解核对
+# AWS RAG Part 1：阅读笔记
 
 来源：[From RAG to fabric: Lessons learned from building real-world RAGs at GenAIIC – Part 1](https://aws.amazon.com/blogs/machine-learning/from-rag-to-fabric-lessons-learned-from-building-real-world-rags-at-genaiic-part-1/)，Aude Genevay，AWS，2024-10-24。
 
@@ -35,24 +35,11 @@ reviewed: 2026-09-27
 | Improving reliability | 约束回答依据，用引用支持核验。 |
 | Conclusion | 根据评估迭代整条流水线。 |
 
-以上为[原文](https://aws.amazon.com/blogs/machine-learning/from-rag-to-fabric-lessons-learned-from-building-real-world-rags-at-genaiic-part-1/)的简要归纳；下文重点是对现有笔记的分析与自拟示例，不是原文逐段翻译。
+以上为[原文](https://aws.amazon.com/blogs/machine-learning/from-rag-to-fabric-lessons-learned-from-building-real-world-rags-at-genaiic-part-1/)的简要归纳。下文围绕 chunk 上下文、关键词与术语提取、改写用途三个阅读重点展开，结合原文核验与自拟示例，按入库、检索和生成阶段组织。
 
-## 2. 对你原有重点的逐项判断
+## 2. 入库：为 chunk 补充文档标题与上下文
 
-你的原记录保留在 [[LLM Rewrite 资料]]，这里拆成四项核对。
-
-| 你的关注 | 判断 | 建议修正 |
-| --- | --- | --- |
-| 给 chunk 一个 title 或 title name，让段落更好匹配 | **方向正确，表达需收紧。** | 原文具体做法是把所属文档的名称或标题前置到各 chunk。重点是恢复“这段内容属于哪个对象”的信息，并非必须为每个 chunk 生成一个新标题。 |
-| rewrite 时提供足够的关键词，以便搜索匹配 | **部分正确。** | 关键是保留有效检索信息，而非关键词数量。原文将输出分为 `rewritten_query`、`keywords`、`product_name`，分别服务于不同检索操作。 |
-| extract 当前需要的术语 | **方向正确，但术语和实体要分开。** | 属性词适合词法匹配；产品名等实体可以用于限定搜索范围。原文的 `keywords` 明确不包含产品名，后者单独输出。 |
-| 明确使用目的，例如搜索 | **正确，但要具体到处理阶段。** | 查询里用于回答格式的指令不必进入检索文本；原始指令仍应保留给生成阶段。生成语义查询、抽关键词、生成过滤值是三种不同用途。 |
-
-核对依据：原文的 **Adding metadata information to text chunks、Rewriting the user query、Metadata filtering** 三节。[原文链接](https://aws.amazon.com/blogs/machine-learning/from-rag-to-fabric-lessons-learned-from-building-real-world-rags-at-genaiic-part-1/)
-
-**整体判断：你抓住了与 query rewriting 最相关的重点，但当前记录混合了入库、查询处理和回答生成三个阶段。** 把这三个阶段分开，后续设计实现会更清楚。
-
-## 3. “给 chunk 加标题”应该怎样理解
+给 chunk 补充标题有助于匹配，但关键是把**所属文档的名称或标题**带入各 chunk，恢复“这段内容属于哪个对象”的信息，并非必须为每个 chunk 生成新标题。对应原文的 Adding metadata information to text chunks 一节。
 
 以下使用自拟产品示例解释。
 
@@ -83,7 +70,9 @@ chunk 正文：每运行 600 小时补充润滑脂。
 
 此外，标题能补充“这段讲谁”，却不能补回被切断的步骤、条件或例外说明。如果命中的 chunk 只包含操作步骤的前半部分，应考虑章节切分或取回相邻／父级文本。判断是否需要扩展上下文，要依据任务而非固定追求大 chunk。
 
-## 4. Rewrite 应输出什么：按用途拆分
+## 3. 查询改写：按用途拆分检索文本、关键词与实体
+
+Rewrite 的目标是保留有效检索信息，而非增加关键词数量。原文 Rewriting the user query 一节用三个字段分别服务于语义检索、词法检索和实体过滤：`rewritten_query`、`keywords`、`product_name`。其中 `keywords` 明确不包含产品名；属性术语与用于限定范围的实体分开处理。
 
 自拟用户问题：
 
@@ -123,7 +112,7 @@ chunk 正文：每运行 600 小时补充润滑脂。
 
 “为了搜索”还不够具体，提示词最好明确：哪个字段用于向量检索，哪个用于词法检索，哪个会成为必须满足的约束。
 
-## 5. 除了当前关注点，还应补上的阅读视角
+## 4. 故障定位与效果评估
 
 下面是结合文章问题分类整理的学习框架，表中的诊断问题与验证方式为本笔记的分析建议。
 
@@ -144,15 +133,15 @@ chunk 正文：每运行 600 小时补充润滑脂。
 
 这些标准检索指标通常在 `[0,1]`，越高越好。只有一篇标注相关 chunk 时，单查询 Hit@k 和 Recall@k 一样；多篇相关 chunk 时，命中一篇不代表证据已齐全。更多指标解释见 [[AI Reference/Query Rewriting：Elastic 文章笔记与检索评估指标#5. 评估指标：区间、用途、公式和例子|检索评估指标笔记]]。
 
-## 6. 原文示例不能直接当作可运行的正确实现
+## 5. 实现注意与原文核验
 
-### 6.1 产品名“强制过滤”与代码不一致
+### 5.1 产品名“强制过滤”与代码不一致
 
 原文 Metadata filtering 示例文字与注释描述了强制匹配产品名，但代码将 `match_phrase` 加入的是 `bool.should`，随后语义和词法查询也加入 `should`。这样不能保证所有返回结果都命中产品名：文档可能仅满足其他子句。
 
 按 OpenSearch 布尔查询语义，必须满足的条件应放到 `must` 或 `filter`；`filter` 适用于不需要参与相关性评分的约束。仅包含 `should` 时，默认要求命中其中至少一个，也不等于必须命中特定的产品名子句。[OpenSearch bool 文档](https://docs.opensearch.org/latest/query-dsl/compound/bool/)
 
-### 6.2 `match_phrase` 不等于字段值完全相等
+### 5.2 `match_phrase` 不等于字段值完全相等
 
 `match_phrase` 匹配分析后的短语；一段更长的字段内容也可能包含该短语。如果要求唯一产品一致，更适合将可信产品 ID 或规范化名称存为 `keyword` 类型，并用 `term` 做精确值匹配。字段的 normalizer、大小写与别名映射也应保持一致。[match_phrase 文档](https://docs.opensearch.org/latest/query-dsl/full-text/match-phrase/)、[term 文档](https://docs.opensearch.org/latest/query-dsl/term/term/)
 
@@ -172,24 +161,18 @@ chunk 正文：每运行 600 小时补充润滑脂。
 
 前提是 `product_id` 已映射为适合精确匹配的字段，而且 `motor-a17` 是经过解析确认的 ID。
 
-### 6.3 提取了 keywords，不代表后续代码真的用了它
+### 5.3 提取了 keywords，不代表后续代码真的用了它
 
 原文最后的组合示例读取了 `json_query["keywords"]`，但词法 `match` 实际仍使用原始 `query`。因此不能依据这段代码声称它已将抽取关键词用于词法分支。复现时应检查每个输出字段最终接入哪里。
 
-### 6.4 引文存在，不等于答案一定正确
+### 5.4 引文存在，不等于答案一定正确
 
 这是对原文可靠性措辞的补充判断：逐字检查可以验证引用是否出现在来源中，不能单独保证结论正确。例如原文说“A17 在高温下缩短润滑周期”，答案却借这句话断言“所有电机都缩短周期”；引文存在，但泛化错误。应分别验证：引用存在、对象一致、条件保留、结论由证据支持。
 
 本文发表于 2024 年，模型上下文长度、微调支持、托管服务功能等属于当时背景。本笔记不把这些历史描述作为当前产品能力保证，也没有运行原文代码。
 
-## 7. 与前一篇 Elastic 笔记怎么衔接
+## 6. 与 Elastic 查询改写笔记的衔接
 
 从已有学习记录看，两篇文章适合分别承担不同角色：Elastic 帮助理解“如何约束生成内容并组合检索分数”；AWS 帮助建立“从入库到生成，问题出在哪个环节”的排查顺序。
 
 不要直接把 Elastic 中保留原查询的加分模板，当成 AWS 所有场景的唯一实现；也不要把 AWS 的结构化改写理解为自由生成整段查询代码。共同可采用的工程原则是：**让模型输出职责明确的内容，应用程序负责校验和执行，再用相应指标验证效果。**
-
-## 8. 建议维护进资料页的表述
-
-> 对 chunk，应补充所属文档标题、实体等真实上下文，并保留可过滤的元数据。对查询，rewrite 应分别生成语义检索文本、词法关键词和明确的实体过滤值，而不是单纯堆关键词；回答格式要求留给生成阶段。整体上，应先区分漏召回、噪声过多、上下文残缺和生成错误，再选择优化手段，并分别评估检索质量与答案可靠性。
-
-这段是对你原记录的修订建议。原始关注点予以保留，便于比较理解如何变化。
