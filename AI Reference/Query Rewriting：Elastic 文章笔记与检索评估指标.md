@@ -334,7 +334,7 @@ $$
 | Max output | 最多生成的 token 数 | 短列表任务通常不需要很长输出。 |
 | Input / output cost | 每百万输入／输出 tokens 的计费 | 两者分别计费，还受平台、缓存、批处理等影响。 |
 
-原文模型参数量列带有估计性质，价格表也不适合作为采购依据：其中 Sonnet 的输入 `$15`、输出 `$4` 与 Anthropic 发布时的 `$3 / $15`（每百万输入／输出 tokens）不符。本笔记保留实验质量表，不沿用该规格表作为可靠事实，更不作为当前报价。[Anthropic 发布说明](https://www.anthropic.com/news/3-5-models-and-computer-use)
+原文模型参数量列带有估计性质，价格表也不适合作为采购依据：例如其 Haiku 输入 `$3`、输出 `$0.80`，与 Anthropic 发布说明中 2024-12-03 更新的 `$0.80 / $4`（每百万输入／输出 tokens）不符。本笔记保留实验质量表，不沿用该规格表作为可靠事实，更不作为当前报价。[Anthropic 发布说明](https://www.anthropic.com/news/3-5-models-and-computer-use)
 
 ## 7. 如何把结论用到自己的检索系统
 
